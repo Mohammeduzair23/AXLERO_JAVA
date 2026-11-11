@@ -1,0 +1,38 @@
+# Settings shared by every environment.
+# Environment-specific values live in application-dev.yml / application-prod.yml.
+
+spring:
+  application:
+    name: dashboard-builder
+
+  # Local development reads secrets from a git-ignored ".env" file in the
+  # project root. "optional:" means startup does not fail if the file is
+  # absent (e.g. in production, where real environment variables are used).
+  config:
+    import: optional:file:.env[.properties]
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  jpa:
+    open-in-view: false            # avoid lazy-loading surprises in controllers
+    hibernate:
+      ddl-auto: validate           # Flyway owns the schema; Hibernate only checks it
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful               # finish in-flight requests on shutdown
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
