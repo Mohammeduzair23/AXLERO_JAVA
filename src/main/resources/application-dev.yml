@@ -1,21 +1,16 @@
-# Local development profile (default).
+# Development-only settings. Secrets come from the git-ignored .env file.
+
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/dashboard_builder}
-    username: ${DB_USERNAME:dashboard_user}
-    password: ${DB_PASSWORD}       # no default on purpose: comes from .env
-    hikari:
-      maximum-pool-size: 10
-
+    url: ${DB_URL}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
   jpa:
     show-sql: false
+    hibernate:
+      ddl-auto: update   # dev only: Hibernate generates the schema from the entities
 
-logging:
-  level:
-    com.axlero: DEBUG
-    org.hibernate.SQL: DEBUG
-
-management:
-  endpoint:
-    health:
-      show-details: always
+app:
+  jwt:
+    secret: ${JWT_SECRET}                          # at least 32 characters
+    expiration-ms: ${JWT_EXPIRATION_MS:3600000}    # 1 hour
