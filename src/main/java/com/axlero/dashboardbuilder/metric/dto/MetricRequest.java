@@ -1,5 +1,6 @@
-package com.axlero.dashboardbuilder.metric;
+package com.axlero.dashboardbuilder.metric.dto;
 
+import com.axlero.dashboardbuilder.metric.entity.AggregationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

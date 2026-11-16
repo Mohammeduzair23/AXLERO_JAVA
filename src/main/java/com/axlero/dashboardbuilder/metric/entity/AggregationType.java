@@ -1,5 +1,5 @@
 
-package com.axlero.dashboardbuilder.metric;
+package com.axlero.dashboardbuilder.metric.entity;
 
 public enum AggregationType {
     SUM,
