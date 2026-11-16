@@ -1,49 +1,76 @@
-# Axlero - Enterprise Data Dashboard Builder
+# Axlero Dashboard Builder
 
-Authenticated users organize **dashboards** inside **workspaces** and place configurable **widgets** on them.
+Axlero is a dashboard-builder backend for organizing dashboards and configurable widgets in workspaces.
 
-```
-User -> Workspace -> Dashboard -> WidgetConfig
-```
+**Current status:** the backend foundation and JWT authentication are implemented. The workspace → dashboard → widget data model is in place, but the corresponding management APIs and dashboard functionality are not implemented yet.
 
-**Stack:** Java 17 | Spring Boot 3.5.x | Spring Data JPA / Hibernate | PostgreSQL | Spring Security | JWT | Maven
-(React + Axios frontend comes in a later week.)
+## Project progress
 
-## Week 1 scope
+| Area | Status | Completed work |
+|---|---|---|
+| Application and persistence foundation | Complete | Spring Boot application, PostgreSQL/JPA configuration, and local development profile |
+| Health and error handling | Complete | `/api/health`, Actuator health endpoints, request validation, and consistent JSON error responses |
+| Authentication | Complete | Registration and login, BCrypt password hashing, signed JWT access tokens, stateless security, and current-user endpoint |
+| Dashboard data model | Foundation complete | UUID entities for users, workspaces, dashboards, and widget configurations; ownership and parent relationships; JSONB widget configuration |
+| Metric configuration | In progress | Metric request model and aggregation types exist; metric execution and data-source integration are not implemented |
+| Dashboard/workspace/widget APIs | Not started | No CRUD endpoints or dashboard editing flow yet |
+| Frontend and visualizations | Not started | No React UI or chart rendering yet |
 
-Backend foundation, stateless JWT auth, and the first relational model
-(`User`, `Workspace`, `Dashboard`, `WidgetConfig`).
+The current automated test suite contains a focused unit test for the metric request model; authentication and API integration coverage remain future work.
 
-**Out of scope for Week 1:** dashboard editor UI, chart rendering, data-source integrations,
-workspace collaboration, fine-grained permissions, refresh tokens, CI/CD.
+## Technology
 
-## Architecture decisions
+- Java 21
+- Spring Boot 3.5.7
+- Spring Web, Spring Security, Spring Data JPA, Bean Validation, and Actuator
+- PostgreSQL
+- JWT (JJWT)
+- Maven
 
-1. **Workspace ownership:** one owner per workspace in the first release.
-2. **Identifiers:** UUID primary keys.
-3. **Authentication:** short-lived signed JWT access tokens, stateless Spring Security.
-4. **Password storage:** BCrypt hashes only.
-5. **Widget flexibility:** PostgreSQL JSONB for type-specific widget settings.
-6. **API boundary:** DTOs for requests/responses; JPA entities are never exposed.
-7. **Schema ownership:** Hibernate `ddl-auto: update` for local Week 1 only; Flyway migrations + `validate` for shared environments.
-8. **Authorization:** current user comes from the security principal; ownership is verified in services.
+## API currently available
 
-## Local setup
+| Method | Endpoint | Access | Purpose |
+|---|---|---|---|
+| `GET` | `/api/health` | Public | Application health response |
+| `POST` | `/api/auth/register` | Public | Register a user and return an access token |
+| `POST` | `/api/auth/login` | Public | Authenticate a user and return an access token |
+| `GET` | `/api/auth/me` | Bearer token | Return the authenticated user's profile |
+| `GET` | `/actuator/health` | Public | Actuator health endpoint |
 
-Prerequisites: JDK 17+, Maven 3.9+, PostgreSQL.
+Send the access token on protected requests as `Authorization: Bearer <token>`. Registration and login requests are validated; passwords must be 8–72 characters. Duplicate email addresses return a conflict response.
+
+## Run locally
+
+Prerequisites: JDK 21+, Maven, and PostgreSQL.
+
+Create a database:
 
 ```sql
-CREATE DATABASE dashboard_builder;
+CREATE DATABASE dashboard_db;
 ```
 
+Create a `.env` file in the project root (do not commit real credentials):
+
+```properties
+DB_URL=jdbc:postgresql://localhost:5432/dashboard_db
+DB_USERNAME=postgres
+DB_PASSWORD=your-local-database-password
+JWT_SECRET=replace-with-a-random-secret-at-least-32-characters-long
+```
+
+The development profile is active by default. It reads these values from `.env`; `DB_USERNAME` defaults to `postgres` and `JWT_EXPIRATION_MS` defaults to `3600000` (one hour).
+
+Start the application:
+
 ```bash
-cp .env.example .env     # then edit DB_USERNAME / DB_PASSWORD
 mvn spring-boot:run
 ```
 
-Verify: `GET http://localhost:8080/api/health` returns `{"status":"UP", ...}`.
+The server listens on port `8080` by default. Override it with `SERVER_PORT`.
 
-## Error format
+## Error responses
+
+API errors use a consistent JSON shape. Validation failures also include `fieldErrors`.
 
 ```json
 {
@@ -54,11 +81,3 @@ Verify: `GET http://localhost:8080/api/health` returns `{"status":"UP", ...}`.
   "path": "/api/unknown"
 }
 ```
-Validation errors (400) also include a `fieldErrors` array.
-
-## Releases
-
-| Tag  | Content |
-|------|---------|
-| v1a  | Project setup + PostgreSQL configuration |
-| v1b  | Package structure, error handling, health endpoint |
