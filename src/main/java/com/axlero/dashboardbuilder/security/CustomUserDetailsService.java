@@ -1,7 +1,7 @@
 package com.axlero.dashboardbuilder.security;
 
-import com.axlero.dashboardbuilder.user.entity.User;
-import com.axlero.dashboardbuilder.user.repository.UserRepository;
+import com.axlero.dashboardbuilder.entities.User;
+import com.axlero.dashboardbuilder.repositories.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
