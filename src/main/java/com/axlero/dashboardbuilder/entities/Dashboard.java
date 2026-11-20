@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "dashboards")
+@Table(name = "dashboards", indexes = @Index(name = "idx_dashboards_workspace", columnList = "workspace_id"))
 @Getter
 @Setter
 @NoArgsConstructor
