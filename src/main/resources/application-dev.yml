@@ -14,3 +14,7 @@ app:
   jwt:
     secret: ${JWT_SECRET}                          # at least 32 characters
     expiration-ms: ${JWT_EXPIRATION_MS:3600000}    # 1 hour
+
+logging:
+  level:
+    com.axlero.dashboardbuilder: DEBUG   # a "Metric query executed" line appears only on a cache MISS

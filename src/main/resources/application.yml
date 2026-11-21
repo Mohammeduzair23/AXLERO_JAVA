@@ -1,13 +1,13 @@
 # Settings shared by every environment.
-# Environment-specific values live in application-dev.yml / application-prod.yml.
+# Environment-specific values live in application-dev.yml (and a future application-prod.yml).
 
 spring:
   application:
     name: dashboard-builder
 
-  # Local development reads secrets from a git-ignored ".env" file in the
-  # project root. "optional:" means startup does not fail if the file is
-  # absent (e.g. in production, where real environment variables are used).
+  # Local development reads secrets from a git-ignored ".env" file in the project root.
+  # "optional:" means startup does not fail if the file is absent
+  # (e.g. in production, where real environment variables are used).
   config:
     import: optional:file:.env[.properties]
 
@@ -17,14 +17,28 @@ spring:
   jpa:
     open-in-view: false            # avoid lazy-loading surprises in controllers
     hibernate:
-      ddl-auto: validate           # Flyway owns the schema; Hibernate only checks it
+      ddl-auto: validate           # production expects the schema to already exist; dev overrides this
     properties:
       hibernate:
         jdbc:
           time_zone: UTC
 
+  cache:
+    type: redis
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      timeout: 2s                  # fail fast if Redis is down; the cache error handler then falls back to the database
+      connect-timeout: 2s
+
+app:
+  cache:
+    metrics-ttl-minutes: 5         # widget data is cached this long (and cleared whenever sales data is imported)
+
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT}
   shutdown: graceful               # finish in-flight requests on shutdown
 
 management:

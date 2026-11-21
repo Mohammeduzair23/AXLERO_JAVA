@@ -2,6 +2,8 @@ package com.axlero.dashboardbuilder.entities;
 
 import com.axlero.dashboardbuilder.enums.AggregationType;
 import com.axlero.dashboardbuilder.enums.ChartType;
+import com.axlero.dashboardbuilder.enums.GroupByField;
+import com.axlero.dashboardbuilder.enums.MetricField;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "widget_configs")
+@Table(name = "widget_configs", indexes = @Index(name = "idx_widgets_dashboard", columnList = "dashboard_id"))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,17 +26,18 @@ public class WidgetConfig {
     @Column(nullable = false, length = 100)
     private String title;
 
-    // Example: amount, quantity, sales_id
-    @Column(nullable = false, length = 100)
-    private String metricField;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private MetricField metricField;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private AggregationType aggregationType;
 
-    // Example: region, product, sale_date
-    @Column(length = 100)
-    private String groupByField;
+    // null means "no grouping" (a single KPI value)
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private GroupByField groupByField;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
