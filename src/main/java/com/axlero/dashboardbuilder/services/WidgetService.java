@@ -1,5 +1,5 @@
 package com.axlero.dashboardbuilder.services;
-
+import java.time.LocalDate;
 import com.axlero.dashboardbuilder.dto.request.MetricRequest;
 import com.axlero.dashboardbuilder.dto.request.WidgetRequest;
 import com.axlero.dashboardbuilder.dto.response.MetricResponse;
@@ -54,12 +54,30 @@ public class WidgetService {
 
     /** Runs the widget's saved configuration and returns the numbers to draw. */
     @Transactional(readOnly = true)
-    public MetricResponse getData(String email, UUID workspaceId, UUID dashboardId, UUID widgetId) {
+    public MetricResponse getData(
+            String email,
+            UUID workspaceId,
+            UUID dashboardId,
+            UUID widgetId,
+            LocalDate dateFrom,
+            LocalDate dateTo) {
+
         access.requireRole(workspaceId, email, WorkspaceRole.VIEWER);
+
         findDashboard(workspaceId, dashboardId);
+
         WidgetConfig widget = findWidget(dashboardId, widgetId);
-        return metricQueryExecutor.execute(workspaceId, new MetricRequest(
-                widget.getMetricField(), widget.getAggregationType(), widget.getGroupByField(), null, null));
+
+        return metricQueryExecutor.execute(
+                workspaceId,
+                new MetricRequest(
+                        widget.getMetricField(),
+                        widget.getAggregationType(),
+                        widget.getGroupByField(),
+                        dateFrom,
+                        dateTo
+                )
+        );
     }
 
     @Transactional

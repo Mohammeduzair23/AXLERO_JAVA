@@ -1,5 +1,5 @@
 package com.axlero.dashboardbuilder.controllers;
-
+import java.time.LocalDate;
 import com.axlero.dashboardbuilder.dto.request.WidgetRequest;
 import com.axlero.dashboardbuilder.dto.response.MetricResponse;
 import com.axlero.dashboardbuilder.dto.response.WidgetResponse;
@@ -35,9 +35,22 @@ public class WidgetController {
     }
 
     @GetMapping("/{widgetId}/data")
-    public MetricResponse data(@AuthenticationPrincipal UserDetails principal, @PathVariable UUID workspaceId,
-                               @PathVariable UUID dashboardId, @PathVariable UUID widgetId) {
-        return widgetService.getData(principal.getUsername(), workspaceId, dashboardId, widgetId);
+    public MetricResponse data(
+            @AuthenticationPrincipal UserDetails principal,
+            @PathVariable UUID workspaceId,
+            @PathVariable UUID dashboardId,
+            @PathVariable UUID widgetId,
+            @RequestParam(required = false) LocalDate dateFrom,
+            @RequestParam(required = false) LocalDate dateTo) {
+
+        return widgetService.getData(
+                principal.getUsername(),
+                workspaceId,
+                dashboardId,
+                widgetId,
+                dateFrom,
+                dateTo
+        );
     }
 
     @PutMapping("/{widgetId}")
