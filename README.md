@@ -250,3 +250,24 @@ Every failure uses the same body:
 2. **Week 4:** export dashboard data as CSV / Excel (Apache POI), handle all database constraint violations in
    the global handler, OpenAPI annotations on every endpoint, production profile (`ddl-auto: validate` with a real
    schema), final README polish.
+
+## System architecture
+
+```text
++-----------------------+
+| React Frontend        |
+| Dashboards and widgets|
++-----------+-----------+
+            |
++-----------+-----------+
+| Spring Boot API       |
+| REST, JWT, access     |
++-----+-------------+---+
+      |             |
++-----+-------+  +-----+--------------+
+| Redis       |  | PostgreSQL         |
+| Metric cache|  | Users, workspaces, |
++------------+   | dashboards, widgets|
+                 | and sales data     |
+                 +--------------------+
+```
