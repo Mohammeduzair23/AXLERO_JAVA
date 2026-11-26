@@ -63,4 +63,17 @@ public class WorkspaceController {
                                     @Valid @RequestBody AddMemberRequest request) {
         return workspaceService.addMember(principal.getUsername(), workspaceId, request);
     }
+    @DeleteMapping("/{workspaceId}/members/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeMember(
+            @AuthenticationPrincipal UserDetails principal,
+            @PathVariable UUID workspaceId,
+            @PathVariable UUID userId) {
+
+        workspaceService.removeMember(
+                principal.getUsername(),
+                workspaceId,
+                userId
+        );
+    }
 }
