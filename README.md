@@ -6,7 +6,7 @@ build **dashboards** made of **widgets** (bar, line, pie, area, KPI), and each w
 
 Built for the Axlero Java Development (Spring Boot) internship, Project 1.
 
-## Status
+## Status 
     
 | Week | Scope (from the PRD) | Status |
 |---|---|---|
