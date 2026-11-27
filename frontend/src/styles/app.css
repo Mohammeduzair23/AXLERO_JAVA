@@ -1,0 +1,601 @@
+/*
+ * Signed-in app: top bar, workspace cards, panels, members, modal.
+ * Builds on the tokens in global.css (--night, --violet-ink, --muted, --line, --wash, --error...).
+ * Selectors like ".btn.btn--sm" use two classes on purpose, so they win over global.css
+ * whatever order the stylesheets load in.
+ */
+:root {
+  --text: #202842;
+}
+
+/* ---------- buttons (extra variants) ---------- */
+a.btn {
+  text-decoration: none;
+}
+
+.btn.btn--inline {
+  width: auto;
+}
+
+.btn.btn--sm {
+  min-height: 38px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.9rem;
+}
+
+.btn.btn--danger {
+  color: #fff;
+  background: var(--error);
+}
+
+.btn.btn--danger:hover:not(:disabled) {
+  background: #9a1d2d;
+}
+
+.btn.btn--outline-danger {
+  color: var(--error);
+  background: #fff;
+  border-color: var(--error-line);
+}
+
+.btn.btn--outline-danger:hover:not(:disabled) {
+  background: var(--error-wash);
+  border-color: var(--error);
+}
+
+/* ---------- shell ---------- */
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: -9999px;
+  z-index: 60;
+  padding: 0.5rem 0.85rem;
+  color: var(--text);
+  background: #fff;
+  border-radius: 8px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+}
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex-direction: column;
+  color: var(--text);
+  background: var(--wash);
+}
+
+.shell__bar {
+  color: #f2f4ff;
+  background: var(--night);
+}
+
+.shell__bar-inner {
+  display: flex;
+  max-width: 68rem;
+  height: 60px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.shell__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.shell__main {
+  width: 100%;
+  max-width: 68rem;
+  flex: 1;
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 4rem;
+}
+
+/* ---------- user menu ---------- */
+.user-menu {
+  position: relative;
+}
+
+.user-menu__trigger {
+  display: inline-flex;
+  height: 40px;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0.85rem 0 0.4rem;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--night-line);
+  border-radius: 999px;
+}
+
+.user-menu__trigger:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.user-menu__name {
+  max-width: 11rem;
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-menu__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  min-width: 15rem;
+  padding: 0.9rem 0.9rem 0.5rem;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(18, 26, 51, 0.2);
+}
+
+.user-menu__who {
+  margin: 0;
+  font-weight: 600;
+}
+
+.user-menu__email {
+  margin: 0.1rem 0 0.7rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.user-menu__item {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.5rem;
+  color: var(--text);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0 0 8px 8px;
+}
+
+.user-menu__item:hover {
+  background: var(--wash);
+}
+
+.avatar {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--violet-ink);
+  border-radius: 50%;
+}
+
+.avatar--lg {
+  width: 38px;
+  height: 38px;
+  font-size: 0.85rem;
+}
+
+/* ---------- page header ---------- */
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin: 0 0 1.75rem;
+}
+
+.page-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+}
+
+.page-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.page-sub {
+  max-width: 52ch;
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.crumbs a {
+  color: var(--violet-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.crumbs [aria-current='page'] {
+  font-weight: 500;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.crumbs__sep {
+  color: #9aa3ba;
+}
+
+.loading-line {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------- workspace cards ---------- */
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ws-card {
+  display: flex;
+  min-height: 9rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: 100%;
+  padding: 1.15rem 1.25rem;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+a.ws-card:hover {
+  border-color: var(--violet-ink);
+}
+
+.ws-card__name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.ws-card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ws-card--skeleton {
+  animation: pulse 1.4s ease-in-out infinite;
+  background: #e8e9f2;
+  border-color: transparent;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ---------- badges ---------- */
+.badge {
+  display: inline-flex;
+  height: 24px;
+  align-items: center;
+  padding: 0 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: 999px;
+}
+
+.badge--owner {
+  color: #4e3696;
+  background: #e9e4f9;
+}
+
+.badge--editor {
+  color: #1b5a8a;
+  background: #ddeefb;
+}
+
+.badge--viewer {
+  color: #48526c;
+  background: #e8ebf3;
+}
+
+/* ---------- empty / error states ---------- */
+.state {
+  display: grid;
+  justify-items: start;
+  gap: 0.7rem;
+  padding: 2rem;
+  background: #fff;
+  border: 1px dashed #c3c9dd;
+  border-radius: 14px;
+}
+
+.state--error {
+  border-color: var(--error-line);
+  border-style: solid;
+}
+
+.state__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.state__text {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------- panel + members ---------- */
+.panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.35rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel__title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.panel__count {
+  display: inline-grid;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 0.45rem;
+  place-items: center;
+  font-family: var(--font-body, inherit);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--wash);
+  border-radius: 999px;
+}
+
+.panel__note {
+  display: grid;
+  justify-items: start;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 1.1rem 1.35rem;
+  color: var(--muted);
+}
+
+.panel__note p {
+  margin: 0;
+}
+
+.panel__note--foot {
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.members {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1.35rem;
+}
+
+.member + .member {
+  border-top: 1px solid var(--line);
+}
+
+.member__who {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+}
+
+.member__name {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.member__you {
+  margin-left: 0.4rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.member__email {
+  font-size: 0.875rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.invite {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 11.5rem auto;
+  align-items: start;
+  gap: 0.9rem;
+  padding: 1.1rem 1.35rem 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.invite__alert,
+.invite__notice {
+  grid-column: 1 / -1;
+}
+
+.invite__notice {
+  min-height: 1.2em;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f7a55;
+}
+
+.invite__notice:empty {
+  display: none;
+}
+
+.field__select {
+  padding-right: 0.6rem;
+  font: inherit; /* global.css resets button/input fonts but not select */
+  background: #fff;
+}
+
+/* ---------- modal ---------- */
+.modal {
+  width: min(30rem, calc(100% - 2rem));
+  padding: 0;
+  color: var(--text);
+  background: #fff;
+  border: 0;
+  border-radius: 16px;
+}
+
+.modal::backdrop {
+  background: rgba(18, 26, 51, 0.55);
+}
+
+.modal__body {
+  padding: 1.5rem;
+}
+
+.modal__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.modal__text {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+}
+
+.modal__alert {
+  margin-top: 1rem;
+}
+
+.modal__form {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 1.25rem;
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.modal__form .modal__actions {
+  margin-top: 0.4rem;
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 40rem) {
+  .shell__bar-inner,
+  .shell__main {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .user-menu__name {
+    display: none;
+  }
+
+  .user-menu__trigger {
+    padding-right: 0.4rem;
+  }
+
+  .invite {
+    grid-template-columns: 1fr;
+  }
+
+  .invite__spacer {
+    display: none;
+  }
+
+  .member {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-card--skeleton {
+    animation: none;
+  }
+}

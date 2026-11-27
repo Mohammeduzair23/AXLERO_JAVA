@@ -1,9 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import AppShell from './components/layout/AppShell';
 import { ProtectedRoute, PublicOnlyRoute } from './components/RouteGuards';
 import { AuthProvider } from './context/AuthContext';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import WorkspacePage from './pages/WorkspacePage';
+import WorkspacesPage from './pages/WorkspacesPage';
+import './styles/app.css';
 
 export default function App() {
   return (
@@ -15,7 +18,10 @@ export default function App() {
             <Route path="/signup" element={<SignupPage />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<HomePage />} />
+            <Route element={<AppShell />}>
+              <Route path="/" element={<WorkspacesPage />} />
+              <Route path="/workspaces/:workspaceId" element={<WorkspacePage />} />
+            </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
