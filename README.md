@@ -13,7 +13,8 @@ Built for the Axlero Java Development (Spring Boot) internship, Project 1.
 | 1 | Spring Boot setup, layered architecture, JWT auth, entities (User, Workspace, Dashboard, WidgetConfig) | Done |
 | 2 | Dynamic query engine with the JPA Criteria API, SQL-injection protection, unit tests | Done |
 | 3 | Redis caching (`@EnableCaching`, `@Cacheable`) | Done (backend) |
-| 3 | React dashboard with drag-and-drop, Recharts | **Next** |
+| 3 | React app: login and signup | Done |
+| 3 | React app: workspaces, dashboard builder with drag-and-drop, Recharts | **Next** |
 | 4 | CSV / Excel export (Apache POI), final error handling, Swagger polish, README polish | Planned |
 
 ## Tech stack
@@ -84,6 +85,20 @@ mvn spring-boot:run     # starts on http://localhost:8080
 - Swagger UI: http://localhost:8080/swagger-ui.html
 - Health: http://localhost:8080/actuator/health
 
+## Frontend (`frontend/`)
+
+React 18 + Vite. In development Vite proxies `/api` to the backend, so no CORS setup is needed.
+
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:5173  (backend must be running on :8080)
+```
+
+Done so far: sign in and create-account pages with validation that mirrors the backend rules, JWT session kept in
+`localStorage`, route guards, and automatic sign-out when a token expires.
+For a production deployment, set `VITE_API_URL` (see `frontend/.env.example`) and enable CORS in the backend.
+
 ## Security model
 
 - Stateless JWT. Send `Authorization: Bearer <token>` on every call except register, login, Swagger and health.
@@ -108,7 +123,7 @@ All bodies are JSON. `{ws}`, `{dash}`, `{widget}` are UUIDs.
 
 | Method | Path | Body | Returns |
 |---|---|---|---|
-| POST | `/api/auth/register` | `{ "email", "password" (8-72 chars), "fullName" }` | 200 `{ token, user }` |
+| POST | `/api/auth/register` | `{ "email", "password" (8-72 chars), "fullName" }` | 201 `{ token, user }` |
 | POST | `/api/auth/login` | `{ "email", "password" }` | 200 `{ token, user }` |
 | GET | `/api/auth/me` | - | 200 `{ id, email, fullName, role }` |
 
