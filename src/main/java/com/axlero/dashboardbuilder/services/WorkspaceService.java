@@ -38,7 +38,6 @@ public class WorkspaceService {
         User user = findUser(email);
         Workspace workspace = new Workspace();
         workspace.setName(request.name().trim());
-        workspace.setOwner(user);
         workspaceRepository.save(workspace);
         WorkspaceMember owner = memberRepository.save(new WorkspaceMember(workspace, user, WorkspaceRole.OWNER));
         log.info("Workspace created: id={}", workspace.getId());
