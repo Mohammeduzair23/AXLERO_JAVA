@@ -38,6 +38,7 @@ public class WorkspaceService {
         User user = findUser(email);
         Workspace workspace = new Workspace();
         workspace.setName(request.name().trim());
+        workspace.setOwner(user);
         workspaceRepository.save(workspace);
         WorkspaceMember owner = memberRepository.save(new WorkspaceMember(workspace, user, WorkspaceRole.OWNER));
         log.info("Workspace created: id={}", workspace.getId());
@@ -93,6 +94,28 @@ public class WorkspaceService {
         memberRepository.save(new WorkspaceMember(caller.getWorkspace(), invitee, request.role()));
         log.info("Member added: workspace={} user={} role={}", workspaceId, invitee.getId(), request.role());
         return new MemberResponse(invitee.getId(), invitee.getEmail(), invitee.getFullName(), request.role());
+    }
+    @Transactional
+    public void removeMember(String email, UUID workspaceId, UUID userId) {
+
+        // 1. Check whether the requester is the workspace OWNER
+        access.requireRole(workspaceId, email, WorkspaceRole.OWNER);
+
+        // 2. Find the target user's membership
+        WorkspaceMember target = memberRepository
+                .findByWorkspaceIdAndUserId(workspaceId, userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Workspace member", userId));
+
+        // 3. Prevent removal of the last OWNER
+        if (target.getRole() == WorkspaceRole.OWNER) {
+            throw new BadRequestException("Cannot remove the workspace OWNER");
+        }
+
+        // 4. Delete only this membership
+        memberRepository.delete(target);
+
+        log.info("Member removed: workspace={} user={}", workspaceId, userId);
     }
 
     private User findUser(String email) {
