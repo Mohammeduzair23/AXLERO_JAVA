@@ -86,65 +86,6 @@ button {
   animation: spin 0.7s linear infinite;
 }
 
-.home {
-  min-height: 100vh;
-  min-height: 100dvh;
-  background: #f7f8fc;
-}
-
-.home__header {
-  display: flex;
-  min-height: 76px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem clamp(1.25rem, 5vw, 4rem);
-  background: #fff;
-  border-bottom: 1px solid var(--line);
-}
-
-.home__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  color: var(--night);
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.home__content {
-  width: min(100% - 2.5rem, 52rem);
-  margin: clamp(4rem, 12vh, 8rem) auto;
-  padding: clamp(1.5rem, 5vw, 3.5rem);
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: 0 16px 48px rgba(18, 26, 51, 0.06);
-}
-
-.home__eyebrow {
-  color: var(--violet-ink);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-}
-
-.home__content h1 {
-  margin: 0.6rem 0;
-  color: var(--night);
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  line-height: 1.1;
-}
-
-.home__content > p:last-child {
-  max-width: 42rem;
-  color: var(--muted);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
