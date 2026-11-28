@@ -4,6 +4,7 @@ import StateMessage from '../components/ui/StateMessage';
 import RoleBadge from '../components/ui/RoleBadge';
 import WorkspaceNameModal from '../components/workspaces/WorkspaceNameModal';
 import DeleteWorkspaceModal from '../components/workspaces/DeleteWorkspaceModal';
+import DashboardsPanel from '../components/dashboards/DashboardsPanel';
 import MembersPanel from '../components/workspaces/MembersPanel';
 import useAsync from '../hooks/useAsync';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -91,7 +92,10 @@ function WorkspaceView({ workspaceId }) {
         )}
       </header>
 
-      <MembersPanel workspaceId={workspaceId} isOwner={isOwner} />
+      <div className="stack">
+        <DashboardsPanel workspaceId={workspaceId} canEdit={hasRole(workspace.role, 'EDITOR')} />
+        <MembersPanel workspaceId={workspaceId} isOwner={isOwner} />
+      </div>
 
       <WorkspaceNameModal
         open={dialog === 'rename'}
