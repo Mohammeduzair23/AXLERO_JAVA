@@ -1,0 +1,109 @@
+/* Dashboards: section header, cards, widget rows. Builds on app.css. */
+.stack {
+  display: grid;
+  gap: 2.25rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.section-title .panel__count {
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.ws-card__top {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.ws-card__desc {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.page-meta {
+  white-space: nowrap;
+}
+
+.field__input.field__textarea {
+  display: block; /* removes the small gap browsers leave under inline textareas */
+  height: auto;
+  min-height: 5.5rem;
+  padding: 0.7rem 0.9rem;
+  line-height: 1.45;
+  font: inherit;
+  resize: vertical;
+}
+
+.widget-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.widget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.35rem;
+}
+
+.widget-row + .widget-row {
+  border-top: 1px solid var(--line);
+}
+
+.widget-row__who {
+  display: grid;
+  min-width: 0;
+}
+
+.widget-row__title {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.widget-row__meta {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.tag {
+  flex: none;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--wash);
+  border-radius: 6px;
+}
+
+@media (max-width: 40rem) {
+  .widget-row {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
